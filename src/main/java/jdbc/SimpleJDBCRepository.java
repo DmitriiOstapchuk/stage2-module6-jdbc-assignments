@@ -30,12 +30,12 @@ public class SimpleJDBCRepository {
     private static final String findUserByNameSQL = "select * from myusers where firstName = ?";
     private static final String findAllUserSQL = "select * from myusers";
 
-    public Long createUser() {
+    public Long createUser(User user) {
         try (Connection connection = CustomDataSource.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(createUserSQL, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, "firstName");
-            preparedStatement.setString(2, "lastName");
-            preparedStatement.setInt(3, 30);
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setInt(3, user.getAge());
             preparedStatement.executeUpdate();
             ResultSet resultSet = preparedStatement.getGeneratedKeys();
             if (resultSet.next()) {
