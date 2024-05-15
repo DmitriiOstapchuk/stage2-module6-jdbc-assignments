@@ -132,7 +132,7 @@ public class SimpleJDBCRepository {
         try (Connection connection = CustomDataSource.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteUser);
             preparedStatement.setLong(1, userId);
-            ResultSet result = preparedStatement.executeQuery();
+            preparedStatement.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
