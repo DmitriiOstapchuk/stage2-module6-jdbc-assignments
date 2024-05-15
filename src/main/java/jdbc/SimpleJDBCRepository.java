@@ -105,22 +105,22 @@ public class SimpleJDBCRepository {
         return null;
     }
 
-    public User updateUser() {
+    public User updateUser(User user) {
         try (Connection connection = CustomDataSource.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(updateUserSQL, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setString(1, "firstName");
-            preparedStatement.setString(2, "lastName");
-            preparedStatement.setInt(3, 30);
-            preparedStatement.setLong(4, 1);
+            preparedStatement.setString(1, user.getFirstName());
+            preparedStatement.setString(2, user.getLastName());
+            preparedStatement.setInt(3, user.getAge());
+            preparedStatement.setLong(4, user.getId());
             preparedStatement.executeUpdate();
             ResultSet result = preparedStatement.getGeneratedKeys();
             if (result.next()) {
-                User user = new User();
-                user.setId(result.getLong(1));
-                user.setFirstName(result.getString(2));
-                user.setLastName(result.getString(3));
-                user.setAge(result.getInt(4));
-                return user;
+                User updatedUser = new User();
+                updatedUser.setId(result.getLong(1));
+                updatedUser.setFirstName(result.getString(2));
+                updatedUser.setLastName(result.getString(3));
+                updatedUser.setAge(result.getInt(4));
+                return updatedUser;
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,7 +128,7 @@ public class SimpleJDBCRepository {
         return null;
     }
 
-    private void deleteUser(Long userId) {
+    public void deleteUser(Long userId) {
         try (Connection connection = CustomDataSource.getInstance().getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement(deleteUser);
             preparedStatement.setLong(1, userId);
